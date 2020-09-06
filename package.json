@@ -1,0 +1,27 @@
+{
+  "name": "matrix-memory",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ngalstyan4/matrix-memory.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ngalstyan4/matrix-memory/issues"
+  },
+  "homepage": "https://github.com/Ngalstyan4/matrix-memory#readme",
+  "dependencies": {
+    "dat.gui": "^0.7.7",
+    "three": "^0.120.1"
+  },
+  "devDependencies": {
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
+  }
+}
