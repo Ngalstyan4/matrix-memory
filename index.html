@@ -6,9 +6,58 @@
 		<style>
 			body { margin: 0; }
 			canvas { display: block; }
+			 /* needed for ace to work */
+			 #memCanvas {
+				 width: 970px;
+				 height: 400px;
+				 margin-left: 20px;
+				 z-index:0;
+			 }
+			#ide {
+				position: relative;
+				margin: 0;
+				margin-bottom: 20px;
+				padding: 0;
+				width: 800px;
+				height: 250px;
+				border: 2px dashed red;
+				float: left;
+			}
+			#ideControls button {
+				margin-left: 20px;
+				padding: 20px;
+				
+			}
 		</style>
 	</head>
 	<body>
-		<script src="bundle.js"></script>
+		<pre style="margin-left: 20px;">Memory                    8                       16                      24                       32</pre>
+		<canvas id="memCanvas"></canvas>
+		<div id="ide">function program(m, cpu) {
+
+	let A = m.mmalloc(11,11, "row");
+	let padding = m.malloc(3);
+	let B = m.mmalloc(11,14, "row");
+	let padding2 = m.malloc(1);
+
+	let AB = m.mmalloc(11,14, "row"); 
+	let compute = A.multiply(B, AB);
+	let C = m.mmalloc(12,12, "row");
+	cpu(compute);
+	cpu(C.transpose());
+	/*API:
+		m.malloc(size); // allocate an array
+		m.mmalloc(nRow, nCols, major); // matrix malloc. major can be "row" or "col".
+		//^^^ > returns new Matrix
+		
+		Matrix
+			.multiply(otherMatrix, [destinationMatrix])
+			.transpose() // works on square matrices only
+	*/
+}</div>
+<div id="ideControls">
+	<button id="run">Run Program</button>
+</div>
+	<script src="bundle.js"></script>
 	</body>
 </html>

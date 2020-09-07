@@ -17,8 +17,10 @@
   },
   "homepage": "https://github.com/Ngalstyan4/matrix-memory#readme",
   "dependencies": {
+    "ace-builds": "^1.4.12",
     "dat.gui": "^0.7.7",
-    "three": "^0.120.1"
+    "three": "^0.120.1",
+    "webpack-dev-server": "^3.11.0"
   },
   "devDependencies": {
     "webpack": "^4.44.1",

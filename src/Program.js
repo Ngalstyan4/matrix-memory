@@ -1,3 +1,4 @@
+/* this is no longer used. The program is loaded from user input instead */
 import { Memory } from "./Memory";
 
 export function program(m, cpu) {

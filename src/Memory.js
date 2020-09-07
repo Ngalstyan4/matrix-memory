@@ -80,6 +80,21 @@ export class Memory {
             }
         }
     }
+    // visualize some cache proxy
+    refresh(guiParams) {
+        for (let c of this.cells) {
+            let color =  c.material.color.getHex();
+            let redChannel = color >> 16;
+            let bluChannel = color & 0xff;
+            redChannel -= guiParams.fadeRate * 10;
+            bluChannel -= guiParams.fadeRate * 10;
+            redChannel = Math.max(redChannel, (CONFIG.MEMORY.UNINIT & 0xff0000) >> 16);
+            bluChannel = Math.max(bluChannel, (CONFIG.MEMORY.UNINIT & 0x00000ff));
+    
+            redChannel <<= 16;
+            c.material.color.set((color & 0x00ff00) | redChannel| bluChannel);
+        }
+    }
 
     malloc(size) {
         if (this.brk + size > this.cells.length) {
@@ -95,6 +110,9 @@ export class Memory {
         let slice = this.malloc(w * h);
         let m = new Matrix(slice, h, w, major);
         return m;
+    }
+    reset() {
+        this.brk = 0;
     }
 }
 
