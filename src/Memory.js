@@ -48,6 +48,12 @@ class MemorySlice {
 
         return this.cells[this.offset + i].set(v);
     }
+
+    *touchAll() {
+        for (let i = 0; i < this.size; i++ ) {
+            yield this.get(i);
+        }
+    }
 }
 
 
@@ -58,10 +64,10 @@ export class Memory {
         this.cells = []
         this.brk = 0;
 
-        let cellSize = 20;
-        let cellMargin = 4;
+        let cellSize = CONFIG.MEMORY_LAYOUT.CELL_SIZE;
+        let cellMargin = CONFIG.MEMORY_LAYOUT.CELL_MARGIN;
         let planeGeometry = new PlaneBufferGeometry(cellSize, cellSize);
-        for (let j = Math.floor((memRegHeight -CONFIG.MARGIN/4)/ (cellSize + cellMargin)); j >=0; j--) {
+        for (let j = Math.floor((memRegHeight -cellSize)/ (cellSize + cellMargin)); j >=0; j--) {
             for (let i = 0; i <  Math.floor(memRegWidth / (cellSize + cellMargin)); i++) {
                 let cell = new Cell();
 
@@ -104,7 +110,7 @@ class Matrix {
         this.h = h;
         this.major = major;
         this.mem = mem;
-    }
+    } 
 
     check(r, c) {
         if (r < 0 || r >= this.h) {
@@ -123,9 +129,9 @@ class Matrix {
         return this.major == "row" ? this.rget(r,c) : this.cget(r,c);
     }
 
-    set(r, c) {
+    set(r, c, v) {
         if (!this.check(r,c)) return null;
-        return this.major == "row" ? this.rset(r,c) : this.cset(r,c);
+        return this.major == "row" ? this.rset(r,c) : this.cset(r,c, v);
     }
 
     rget(r, c) {
@@ -148,10 +154,43 @@ class Matrix {
         return this.mem.set(ind, v)
     }
 
+    *multiply(matB, res) {
+        if (this.w != matB.h) {
+            console.error("Wrong dimensions, cannot multiply");
+            return null;
+        }
+        if (res && (res.h != this.h || res.w != matB.w)) {
+            console.error("The result matrix has wrong dimensions", res.h, res.w)
+        }
+
+        for (let r1 = 0; r1 < this.h; r1++) {
+            for (let c2 = 0; c2 < matB.w; c2++) {
+                let v = 0;
+                for (let k = 0; k < this.w; k++) {
+                    v += this.get(r1,k) * matB.get(k,c2);
+                    console.log(v);
+                    yield v;
+                }
+                if (res) {
+                    yield res.set(r1, c2, v);
+                }
+            }
+        }
+    }
     
+    *transpose() {
+        if (this.h != this.w) {console.error("Works only for square matrices for now..."); return null}
+        for (let r = 0; r < this.h; r++) {
+            for (let c = 0; c < this.w; c++) {
+                if (r == c) continue;
+                let tmp = this.get(r, c);
+                this.set(r, c, this.get(c, r));
+                this.set(c, r, tmp);
+                yield;
+            }
+        }
+    }
 
-}
-
-class CMatrix {
+    
 
 }
